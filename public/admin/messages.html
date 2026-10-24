@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>留言 · Blog_j 后台</title>
+  <meta name="theme-color" content="#fdfbf7">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/base.css">
+  <link rel="stylesheet" href="/admin/admin.css">
+  <script>
+    (function () {
+      try {
+        var saved = localStorage.getItem('blog-theme');
+        var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', theme);
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body>
+  <header class="admin-header">
+    <div class="admin-brand">Blog_j <em>后台</em></div>
+    <nav class="admin-nav" aria-label="后台导航">
+      <a href="/admin/">文章</a>
+      <a href="/admin/messages.html" aria-current="page">留言</a>
+      <a href="/admin/media.html">媒体库</a>
+      <a href="/admin/pages.html">单页</a>
+      <a href="/admin/settings.html">设置</a>
+      <a href="/posts.html" target="_blank" rel="noopener">前台</a>
+      <a href="#" id="logout">退出</a>
+    </nav>
+  </header>
+
+  <main class="admin-shell">
+    <div class="admin-title">
+      <h1>留言</h1>
+      <span class="hint" id="summary"></span>
+    </div>
+
+    <div class="tabs" id="source-tabs" role="tablist" aria-label="切换留言、评论与用户">
+      <button type="button" class="is-active" data-source="messages" role="tab" aria-selected="true">留言板</button>
+      <button type="button" data-source="comments" role="tab" aria-selected="false">文章评论</button>
+      <button type="button" data-source="users" role="tab" aria-selected="false">注册用户</button>
+    </div>
+
+    <div class="toolbar" style="margin-top:20px">
+      <input class="input" id="search" type="search" placeholder="搜索昵称或内容" style="max-width:260px">
+      <span class="spacer"></span>
+      <button class="btn" id="select-all" type="button">全选本页</button>
+      <button class="btn" id="batch-delete" type="button" disabled>删除所选（0）</button>
+    </div>
+
+    <div class="table-wrap" id="wrap-records">
+      <table class="list" id="list-table">
+        <thead>
+          <tr>
+            <th style="width:34px"></th>
+            <th style="width:120px">昵称</th>
+            <th>内容</th>
+            <th class="col-article" style="width:200px">文章</th>
+            <th style="width:120px">IP</th>
+            <th style="width:150px">时间</th>
+            <th style="width:70px;text-align:right">操作</th>
+          </tr>
+        </thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+
+    <div class="table-wrap" id="wrap-users" hidden>
+      <table class="list">
+        <thead>
+          <tr>
+            <th style="width:180px">用户名</th>
+            <th style="width:160px">昵称</th>
+            <th>评论数</th>
+            <th style="width:160px">注册时间</th>
+            <th style="width:160px">最后登录</th>
+            <th style="width:140px;text-align:right">操作</th>
+          </tr>
+        </thead>
+        <tbody id="user-rows"></tbody>
+      </table>
+    </div>
+
+    <div class="state" id="empty" hidden><strong>还没有留言</strong></div>
+
+    <div class="toolbar" style="margin-top:20px">
+      <span class="hint" id="count"></span>
+      <span class="spacer"></span>
+      <button class="btn" id="more" type="button" hidden>加载更多</button>
+    </div>
+  </main>
+
+  <script src="/admin/js/admin.js"></script>
+  <script src="/admin/js/messages.js"></script>
+</body>
+</html>

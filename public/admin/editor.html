@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>编辑文章 · Blog_j 后台</title>
+  <meta name="theme-color" content="#fdfbf7">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/base.css">
+  <link rel="stylesheet" href="/assets/css/article.css">
+  <link rel="stylesheet" href="/admin/admin.css">
+  <script>
+    (function () {
+      try {
+        var saved = localStorage.getItem('blog-theme');
+        var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', theme);
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body>
+  <header class="admin-header">
+    <div class="admin-brand">Blog_j <em>后台</em></div>
+    <nav class="admin-nav" aria-label="后台导航">
+      <a href="/admin/">文章</a>
+      <a href="/admin/messages.html">留言</a>
+      <a href="/admin/media.html">媒体库</a>
+      <a href="/admin/pages.html">单页</a>
+      <a href="/admin/settings.html">设置</a>
+      <a href="/posts.html" target="_blank" rel="noopener">前台</a>
+      <a href="#" id="logout">退出</a>
+    </nav>
+  </header>
+
+  <main class="admin-shell">
+    <div class="admin-title">
+      <h1 id="page-title">新建文章</h1>
+      <span class="hint" id="save-state"></span>
+    </div>
+
+    <div class="form-grid">
+      <div class="field">
+        <label for="title">标题</label>
+        <input class="input" id="title" type="text" maxlength="200" placeholder="写一个清楚的标题">
+      </div>
+
+      <div class="form-row">
+        <div class="field">
+          <label for="slug">URL 标识（slug）</label>
+          <input class="input" id="slug" type="text" maxlength="200" placeholder="留空自动生成">
+          <p class="hint-text">只能是小写字母、数字和短横线，例如 docker-multi-stage</p>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="field">
+          <label for="category">分类</label>
+          <select id="category">
+            <option value="">未分类</option>
+          </select>
+          <div class="field-actions">
+            <button type="button" id="manage-categories">管理分类</button>
+          </div>
+          <div class="category-panel" id="category-panel" hidden>
+            <ul class="category-list" id="category-list"></ul>
+          </div>
+        </div>
+        <div class="field">
+          <label>封面图（可选）</label>
+          <div class="toolbar" style="margin:0">
+            <button class="btn" id="pick-cover" type="button">选择图片</button>
+            <button class="btn" id="clear-cover" type="button" hidden>清除</button>
+            <span class="cell-meta" id="cover-name"></span>
+          </div>
+          <img id="cover-preview" alt="" hidden style="margin-top:10px;max-width:180px;border:1px solid var(--hair)">
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="publish-at">发布时间</label>
+        <input class="input" id="publish-at" type="datetime-local">
+        <p class="hint-text">留空则发布时自动取当前时间；填一个未来时间就是定时发布，到点自动出现在前台</p>
+      </div>
+
+      <div class="field">
+        <label for="summary">摘要</label>
+        <textarea class="textarea" id="summary" rows="2" maxlength="500" placeholder="留空则自动截取正文前 120 字"></textarea>
+      </div>
+    </div>
+
+    <div class="editor-grid">
+      <div class="editor-pane">
+        <div class="editor-bar">
+          <span>Markdown</span>
+          <span class="spacer"></span>
+          <button type="button" data-insert="image">插入图片</button>
+          <button type="button" data-insert="video-upload">上传视频</button>
+          <button type="button" data-insert="video">视频链接</button>
+          <button type="button" data-insert="code">代码块</button>
+          <button type="button" data-insert="table">表格</button>
+          <button type="button" data-insert="link">链接</button>
+        </div>
+        <textarea id="content" spellcheck="false" placeholder="支持 Markdown：## 二级标题、**加粗**、- 列表、> 引用、``` 代码块"></textarea>
+      </div>
+
+      <div class="editor-pane">
+        <div class="editor-bar">
+          <span>预览</span>
+          <span class="spacer"></span>
+          <span id="word-info"></span>
+        </div>
+        <div class="preview-scroll">
+          <div class="preview-body article-body" id="preview">
+            <p class="preview-empty">开始写，右侧会实时渲染。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="toolbar" style="margin-top:24px">
+      <label class="inline-check"><input type="checkbox" id="is-top"> 置顶到列表最前</label>
+      <span class="spacer"></span>
+      <a class="btn" href="/admin/">返回列表</a>
+      <button class="btn" id="save-draft" type="button">保存草稿</button>
+      <button class="btn btn-primary" id="publish" type="button">保存并发布</button>
+    </div>
+  </main>
+
+  <input type="file" id="content-file" accept="image/png,image/jpeg,image/gif,image/webp,image/avif" hidden>
+  <input type="file" id="video-file" accept="video/mp4,video/webm,video/ogg,video/quicktime" hidden>
+  <input type="file" id="cover-file" accept="image/png,image/jpeg,image/gif,image/webp,image/avif" hidden>
+
+  <script src="/admin/js/admin.js"></script>
+  <script src="/admin/js/editor.js"></script>
+</body>
+</html>

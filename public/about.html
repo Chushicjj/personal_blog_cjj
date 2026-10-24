@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>关于 · Blog_j</title>
+  <meta name="description" content="关于 cjj：后端与运维方向的技术博客。">
+  <meta name="theme-color" content="#fdfbf7">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/base.css">
+  <link rel="stylesheet" href="/assets/css/article.css">
+  <script>
+    (function () {
+      try {
+        var saved = localStorage.getItem('blog-theme');
+        var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', theme);
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body class="about">
+  <a class="skip-link" href="#main">跳到正文</a>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="logo" href="/"><span class="logo-a" data-author>cjj</span><span class="logo-b" data-site-name>Blog_j</span></a>
+
+      <nav class="top-nav" aria-label="主导航">
+        <a href="/" data-nav="home">首页</a>
+        <a href="/posts.html" data-nav="posts">文章</a>
+        <a href="/guestbook.html" data-nav="guestbook">留言</a>
+        <a href="/about.html" data-nav="about" aria-current="page">关于</a>
+      </nav>
+
+      <div class="header-actions">
+        <button class="theme-btn" type="button" id="theme-toggle" aria-pressed="false"><span id="theme-label">深色</span></button>
+        <button class="menu-btn" type="button" id="menu-toggle" aria-expanded="false" aria-controls="mobile-menu">菜单</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="mobile-menu" id="mobile-menu">
+    <a href="/">首页</a>
+    <a href="/posts.html">文章</a>
+    <a href="/guestbook.html">留言</a>
+    <a href="/about.html">关于</a>
+  </div>
+
+  <main class="page" id="main">
+    <article class="article">
+      <p class="article-kicker" id="page-kicker">ABOUT</p>
+      <header class="article-head">
+        <div class="about-head">
+          <figure class="about-avatar" data-avatar>
+            <img alt="cjj 的头像" loading="eager" decoding="async" hidden>
+            <span class="about-avatar-initial" aria-hidden="true">CJ</span>
+          </figure>
+          <div class="about-head-text">
+            <h1 id="page-title">cjj</h1>
+            <p class="about-role" data-tagline>写后端与运维，偶尔折腾静态站点。</p>
+          </div>
+        </div>
+      </header>
+
+      <div class="article-body" id="page-body">
+        <p>做后端与运维，日常和 Linux、Docker、Nginx、MySQL 打交道。</p>
+        <p>这个博客用来记录排查过程、踩过的坑和一些可复用的部署套路，尽量写清「为什么」，而不只是「照着敲」。</p>
+
+        <h2>在做什么</h2>
+        <ul>
+          <li>把线上服务往容器化迁移，顺手整理监控与日志</li>
+          <li>写点小工具，能少点一次鼠标就少点一次</li>
+          <li>维护这个纯静态博客，尽量不引入用不上的依赖</li>
+        </ul>
+
+        <h2>联系</h2>
+        <ul>
+          <li>邮箱：<a data-social="email" href="mailto:chencjj2005@outlook.com">chencjj2005@outlook.com</a></li>
+          <li>GitHub：<a data-social="github" href="https://github.com/cjj" target="_blank" rel="noopener noreferrer">@cjj</a></li>
+        </ul>
+
+        <blockquote>留言请走 <a href="/guestbook.html">留言板</a>，比邮件更容易被我看到。</blockquote>
+      </div>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <span>© <span data-year>2026</span> <span data-site-name>Blog_j</span></span>
+    <span class="sep">·</span>
+    <span>建站于 <span data-since>2024.03</span></span>
+    <span class="sep">·</span>
+    <span>Node.js · Nginx</span>
+    <span class="sep">·</span>
+    <a class="footer-link" href="/archive.html">归档</a>
+    <a class="footer-link" href="/account.html">账号</a>
+    <button class="to-top" id="to-top" type="button" aria-label="回到顶部">↑</button>
+  </footer>
+
+  <script src="/assets/js/config.js"></script>
+  <script src="/assets/js/settings.js"></script>
+  <script src="/assets/js/util.js"></script>
+  <script src="/assets/js/page.js"></script>
+  <script src="/assets/js/shell.js"></script>
+</body>
+</html>

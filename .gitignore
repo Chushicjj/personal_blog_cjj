@@ -1,0 +1,23 @@
+# 依赖
+node_modules/
+
+# 环境变量（真实配置不进库）
+.env
+
+# 运行期产物
+logs/
+data/uploads/
+backups/
+
+# 文档流水线产物（论文/中间文件）
+output/
+*.tar.gz
+
+# 工作区记忆（不进库）
+.workbuddy/
+
+# 系统/编辑器
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

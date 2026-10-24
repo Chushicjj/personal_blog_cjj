@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Blog_j · cjj 的个人博客</title>
+  <meta name="description" content="Blog_j —— cjj 的个人技术博客，记录后端与运维。">
+  <meta name="theme-color" content="#fdfbf7">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/base.css">
+  <script>
+    (function () {
+      try {
+        var saved = localStorage.getItem('blog-theme');
+        var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', theme);
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body class="home">
+  <a class="skip-link" href="#main">跳到正文</a>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="logo" href="/"><span class="logo-a" data-author>cjj</span><span class="logo-b" data-site-name>Blog_j</span></a>
+
+      <nav class="top-nav" aria-label="主导航">
+        <a href="/" data-nav="home" aria-current="page">首页</a>
+        <a href="/posts.html" data-nav="posts">文章</a>
+        <a href="/guestbook.html" data-nav="guestbook">留言</a>
+        <a href="/about.html" data-nav="about">关于</a>
+      </nav>
+
+      <div class="header-actions">
+        <button class="theme-btn" type="button" id="theme-toggle" aria-pressed="false"><span id="theme-label">深色</span></button>
+        <button class="menu-btn" type="button" id="menu-toggle" aria-expanded="false" aria-controls="mobile-menu">菜单</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="mobile-menu" id="mobile-menu">
+    <a href="/">首页</a>
+    <a href="/posts.html">文章</a>
+    <a href="/guestbook.html">留言</a>
+    <a href="/about.html">关于</a>
+  </div>
+
+  <div class="home-frame">
+  <section class="hero" data-flip tabindex="0" role="button" aria-pressed="false" aria-label="双击卡片，绕横轴翻转查看中文版">
+    <div class="hero-flip">
+      <div class="hero-flip-inner">
+        <div class="hero-face hero-face--front">
+
+    <div class="hero-pattern" aria-hidden="true">
+      <span>CJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJ</span>
+      <span>CJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJ</span>
+      <span>CJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJ</span>
+      <span>CJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJ</span>
+      <span>CJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJ</span>
+      <span>CJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJ</span>
+      <span>CJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJ</span>
+      <span>CJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJCJJ</span>
+    </div>
+    <h1 class="sr-only">你好，我是 cjj</h1>
+    <p class="hero-title hero-title--en" aria-hidden="true">HELLO, I'M CJJ</p>
+    <div class="hero-orb" aria-hidden="true"></div>
+    <div class="hero-lens" aria-hidden="true"></div>
+    <div class="hero-invert" aria-hidden="true"><span class="hero-title hero-title--zh">你好，我是 cjj</span></div>
+        </div>
+
+        <div class="hero-face hero-face--back" aria-hidden="true">
+          <p class="hero-title hero-title--back">你好，我是 cjj</p>
+          <p class="hero-back-note" data-tagline>写后端与运维，偶尔折腾静态站点。</p>
+          <span class="hero-back-hint">双击翻回 · DOUBLE-CLICK TO FLIP BACK</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="features" id="features" aria-label="最新文章">
+    <a class="feature-card feature-card--warm" href="/posts.html">
+      <h2>全部文章</h2>
+      <p>按时间倒序，支持标签筛选。如果这里一直停在加载中，说明接口暂时不可用。</p>
+      <span class="feature-meta">查看全部文章 →</span>
+    </a>
+  </section>
+  <section class="build">
+    <div class="build-head">
+      <h2>Build with CJJ</h2>
+      <p>从最近写的文章，到留言和联系方式，都在下面。选一条继续。</p>
+    </div>
+
+    <ol class="build-list">
+      <li>
+        <a class="build-row" href="/posts.html">
+          <span class="build-num">01</span>
+          <span class="build-body">
+            <span class="build-title">全部文章</span>
+            <span class="build-desc">按时间倒序，支持标签筛选</span>
+          </span>
+          <span class="build-arrow" aria-hidden="true">→</span>
+        </a>
+      </li>
+      <li>
+        <a class="build-row" href="/guestbook.html">
+          <span class="build-num">02</span>
+          <span class="build-body">
+            <span class="build-title">留言板</span>
+            <span class="build-desc">不用注册，留下你的想法</span>
+          </span>
+          <span class="build-arrow" aria-hidden="true">→</span>
+        </a>
+      </li>
+      <li>
+        <a class="build-row" href="/about.html">
+          <span class="build-num">03</span>
+          <span class="build-body">
+            <span class="build-title">关于</span>
+            <span class="build-desc">这个博客，和我在做的事</span>
+          </span>
+          <span class="build-arrow" aria-hidden="true">→</span>
+        </a>
+      </li>
+    </ol>
+  </section>
+
+  </div>
+
+  <footer class="site-footer">
+    <span>© <span data-year>2026</span> <span data-site-name>Blog_j</span></span>
+    <span class="sep">·</span>
+    <span>建站于 <span data-since>2024.03</span></span>
+    <span class="sep">·</span>
+    <span>Node.js · Nginx</span>
+    <span class="sep">·</span>
+    <a class="footer-link" href="/archive.html">归档</a>
+    <a class="footer-link" href="/account.html">账号</a>
+    <button class="to-top" id="to-top" type="button" aria-label="回到顶部">↑</button>
+  </footer>
+
+  <script src="/assets/js/config.js"></script>
+  <script src="/assets/js/settings.js"></script>
+  <script src="/assets/js/util.js"></script>
+  <script src="/assets/js/home.js"></script>
+  <script src="/assets/js/shell.js"></script>
+</body>
+</html>

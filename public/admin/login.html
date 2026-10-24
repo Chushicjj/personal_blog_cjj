@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>登录 · Blog_j 后台</title>
+  <meta name="theme-color" content="#fdfbf7">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/base.css">
+  <link rel="stylesheet" href="/admin/admin.css">
+  <script>
+    (function () {
+      try {
+        var saved = localStorage.getItem('blog-theme');
+        var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', theme);
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body>
+  <main class="login-wrap">
+    <form class="login-card" id="login-form" novalidate>
+      <h1>Blog_j 后台</h1>
+      <p class="sub">仅站长可进入</p>
+
+      <div class="form-grid">
+        <div class="field">
+          <label for="username">账号</label>
+          <input class="input" id="username" name="username" type="text" autocomplete="username" autofocus required>
+        </div>
+        <div class="field">
+          <label for="password">密码</label>
+          <input class="input" id="password" name="password" type="password" autocomplete="current-password" required>
+        </div>
+        <button class="btn btn-primary" id="submit" type="submit">登录</button>
+      </div>
+
+      <p class="form-note" id="note" aria-live="polite"></p>
+    </form>
+  </main>
+
+  <script src="/admin/js/admin.js"></script>
+  <script src="/admin/js/login.js"></script>
+</body>
+</html>

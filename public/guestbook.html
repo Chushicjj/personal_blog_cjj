@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>留言 · Blog_j</title>
+  <meta name="description" content="给 cjj 留言。">
+  <meta name="theme-color" content="#fdfbf7">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/base.css">
+  <script>
+    (function () {
+      try {
+        var saved = localStorage.getItem('blog-theme');
+        var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', theme);
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到正文</a>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="logo" href="/"><span class="logo-a" data-author>cjj</span><span class="logo-b" data-site-name>Blog_j</span></a>
+
+      <nav class="top-nav" aria-label="主导航">
+        <a href="/" data-nav="home">首页</a>
+        <a href="/posts.html" data-nav="posts">文章</a>
+        <a href="/guestbook.html" data-nav="guestbook" aria-current="page">留言</a>
+        <a href="/about.html" data-nav="about">关于</a>
+      </nav>
+
+      <div class="header-actions">
+        <button class="theme-btn" type="button" id="theme-toggle" aria-pressed="false"><span id="theme-label">深色</span></button>
+        <button class="menu-btn" type="button" id="menu-toggle" aria-expanded="false" aria-controls="mobile-menu">菜单</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="mobile-menu" id="mobile-menu">
+    <a href="/">首页</a>
+    <a href="/posts.html">文章</a>
+    <a href="/guestbook.html">留言</a>
+    <a href="/about.html">关于</a>
+  </div>
+
+  <main class="page" id="main">
+    <div class="page-head">
+      <h1>留言</h1>
+      <p>无需注册 · 提交即显示</p>
+    </div>
+
+    <form class="guest-form" id="guest-form" novalidate>
+      <div class="form-row">
+        <label class="field">
+          <span class="field-label">昵称</span>
+          <input class="input" id="guest-name" name="nickname" type="text" maxlength="20" placeholder="怎么称呼你" autocomplete="nickname" required>
+        </label>
+        <label class="field">
+          <span class="field-label">留言</span>
+          <textarea class="textarea" id="guest-content" name="content" maxlength="500" placeholder="随便聊聊，或者告诉我哪篇写错了" required></textarea>
+        </label>
+      </div>
+      <div class="form-foot">
+        <button class="btn btn-primary" id="guest-submit" type="submit">发表留言</button>
+        <span class="counter" id="guest-counter">0 / 500</span>
+      </div>
+      <p class="form-note" id="guest-note" aria-live="polite"></p>
+    </form>
+
+    <div class="list-head">
+      <h2>留言</h2>
+      <span id="guest-summary"></span>
+    </div>
+    <div id="guest-list" aria-live="polite"><div class="state">正在加载留言…</div></div>
+    <div class="list-actions" id="guest-more" hidden>
+      <button class="btn" id="guest-load-more" type="button">加载更多</button>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <span>© <span data-year>2026</span> <span data-site-name>Blog_j</span></span>
+    <span class="sep">·</span>
+    <span>建站于 <span data-since>2024.03</span></span>
+    <span class="sep">·</span>
+    <span>Node.js · Nginx</span>
+    <span class="sep">·</span>
+    <a class="footer-link" href="/archive.html">归档</a>
+    <a class="footer-link" href="/account.html">账号</a>
+    <button class="to-top" id="to-top" type="button" aria-label="回到顶部">↑</button>
+  </footer>
+
+  <script src="/assets/js/config.js"></script>
+  <script src="/assets/js/settings.js"></script>
+  <script src="/assets/js/util.js"></script>
+  <script src="/assets/js/api.js"></script>
+  <script src="/assets/js/guestbook.js"></script>
+  <script src="/assets/js/shell.js"></script>
+</body>
+</html>

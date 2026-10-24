@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>站点设置 · Blog_j 后台</title>
+  <meta name="theme-color" content="#fdfbf7">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/base.css">
+  <link rel="stylesheet" href="/admin/admin.css">
+  <script>
+    (function () {
+      try {
+        var saved = localStorage.getItem('blog-theme');
+        var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', theme);
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body>
+  <header class="admin-header">
+    <div class="admin-brand">Blog_j <em>后台</em></div>
+    <nav class="admin-nav" aria-label="后台导航">
+      <a href="/admin/">文章</a>
+      <a href="/admin/messages.html">留言</a>
+      <a href="/admin/media.html">媒体库</a>
+      <a href="/admin/pages.html">单页</a>
+      <a href="/admin/settings.html" aria-current="page">设置</a>
+      <a href="/posts.html" target="_blank" rel="noopener">前台</a>
+      <a href="#" id="logout">退出</a>
+    </nav>
+  </header>
+
+  <main class="admin-shell">
+    <div class="admin-title">
+      <h1>站点设置</h1>
+      <span class="hint">保存后前台刷新即生效</span>
+    </div>
+
+    <form class="form-grid" id="settings-form" novalidate>
+      <div class="field">
+        <label>头像</label>
+        <div class="avatar-row">
+          <div class="avatar-preview">
+            <img id="avatar-img" alt="" hidden>
+            <span id="avatar-initial" aria-hidden="true">CJ</span>
+          </div>
+          <div class="avatar-actions">
+            <button class="btn" id="pick-avatar" type="button">上传头像</button>
+            <button class="btn" id="clear-avatar" type="button" hidden>清除</button>
+            <p class="hint-text">建议用正方形图片，展示时裁成圆形；留空则显示作者名首字母</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="field">
+          <label for="siteName">站点名</label>
+          <input class="input" id="siteName" type="text" maxlength="40" placeholder="Blog_j">
+          <p class="hint-text">显示在每页左上角 logo 与页脚版权</p>
+        </div>
+        <div class="field">
+          <label for="author">作者名</label>
+          <input class="input" id="author" type="text" maxlength="40" placeholder="cjj">
+          <p class="hint-text">logo 左侧的小字、首页 "HELLO, I'M ___"</p>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="tagline">一句话简介</label>
+        <input class="input" id="tagline" type="text" maxlength="120" placeholder="写后端与运维，偶尔折腾静态站点。">
+        <p class="hint-text">首页翻转卡背面、关于页会用到</p>
+      </div>
+
+      <div class="form-row">
+        <div class="field">
+          <label for="since">建站时间</label>
+          <input class="input" id="since" type="text" maxlength="20" placeholder="2024.03">
+          <p class="hint-text">页脚「建站于 ___」，纯文本不做解析</p>
+        </div>
+        <div class="field">
+          <label for="email">邮箱</label>
+          <input class="input" id="email" type="email" maxlength="120" placeholder="you@example.com">
+          <p class="hint-text">留空则隐藏页脚邮箱入口</p>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="github">GitHub 地址</label>
+        <input class="input" id="github" type="url" maxlength="200" placeholder="https://github.com/yourname">
+        <p class="hint-text">必须是 http(s) 完整地址；留空则隐藏 GitHub 入口</p>
+      </div>
+
+      <div class="toolbar" style="margin-top:6px">
+        <button class="btn btn-primary" id="save" type="submit">保存设置</button>
+        <button class="btn" id="reset" type="button">放弃修改</button>
+        <span class="spacer"></span>
+        <a class="btn" href="/" target="_blank" rel="noopener">打开首页</a>
+      </div>
+    </form>
+
+    <p class="hint-text" style="margin-top:26px;max-width:640px">
+      这些字段存在数据库 <code>site_settings</code> 表里，前台每次加载都会读一次接口。
+      <code>public/assets/js/config.js</code> 只作为接口不可用时的兜底默认值，不再需要手改。
+    </p>
+  </main>
+
+  <input type="file" id="avatar-file" accept="image/png,image/jpeg,image/gif,image/webp,image/avif" hidden>
+
+  <script src="/admin/js/admin.js"></script>
+  <script src="/admin/js/settings.js"></script>
+</body>
+</html>

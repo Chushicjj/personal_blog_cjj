@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>媒体库 · Blog_j 后台</title>
+  <meta name="theme-color" content="#fdfbf7">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/base.css">
+  <link rel="stylesheet" href="/admin/admin.css">
+  <script>
+    (function () {
+      try {
+        var saved = localStorage.getItem('blog-theme');
+        var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', theme);
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body>
+  <header class="admin-header">
+    <div class="admin-brand">Blog_j <em>后台</em></div>
+    <nav class="admin-nav" aria-label="后台导航">
+      <a href="/admin/">文章</a>
+      <a href="/admin/messages.html">留言</a>
+      <a href="/admin/media.html" aria-current="page">媒体库</a>
+      <a href="/admin/pages.html">单页</a>
+      <a href="/admin/settings.html">设置</a>
+      <a href="/posts.html" target="_blank" rel="noopener">前台</a>
+      <a href="#" id="logout">退出</a>
+    </nav>
+  </header>
+
+  <main class="admin-shell">
+    <div class="admin-title">
+      <h1>媒体库</h1>
+      <span class="hint" id="usage"></span>
+    </div>
+
+    <div class="upload-zone" id="upload-zone" role="button" tabindex="0">
+      <span>点击或拖拽图片到此处上传 · PNG / JPEG / GIF / WebP / AVIF · 单张 ≤ 5MB</span>
+    </div>
+
+    <div class="media-grid" id="grid"></div>
+    <div class="state" id="empty" hidden><strong>还没有上传过图片</strong></div>
+
+    <div class="toolbar" style="margin-top:20px">
+      <span class="hint" id="count"></span>
+      <span class="spacer"></span>
+      <button class="btn" id="more" type="button" hidden>加载更多</button>
+    </div>
+
+    <div class="admin-title" style="margin:48px 0 16px">
+      <h2 style="margin:0;font-size:19px;font-weight:700;letter-spacing:-0.01em">视频文件</h2>
+      <span class="hint" id="video-summary"></span>
+    </div>
+
+    <div class="table-wrap">
+      <table class="list">
+        <thead>
+          <tr>
+            <th style="width:48%">文件</th>
+            <th>大小</th>
+            <th>上传时间</th>
+            <th style="text-align:right">操作</th>
+          </tr>
+        </thead>
+        <tbody id="video-rows"></tbody>
+      </table>
+    </div>
+    <div class="state" id="video-empty" hidden><strong>还没有上传过视频</strong></div>
+  </main>
+
+  <input type="file" id="file-input" accept="image/png,image/jpeg,image/gif,image/webp,image/avif" multiple hidden>
+
+  <script src="/admin/js/admin.js"></script>
+  <script src="/admin/js/media.js"></script>
+</body>
+</html>

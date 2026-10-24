@@ -1,0 +1,53 @@
+# Docker Compose V2 不再需要 version 字段
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        NODE_IMAGE: node:24.22.0-bookworm-slim
+    image: blog-api:1.0.0
+    container_name: blog-api
+    restart: always
+
+    # 数据库等连接信息全部来自宿主机上已有的 .env（文件内容无需改动）
+    env_file:
+      - .env
+
+    environment:
+      NODE_ENV: production
+      SERVER_PORT: "3000"
+      TZ: Asia/Shanghai
+      LOG_LEVEL: info
+      LOG_TO_FILE: "true"
+      LOG_DIR: /app/logs
+
+    # 只绑定回环地址：公网访问必须经过 Nginx 反向代理
+    ports:
+      - "127.0.0.1:3000:3000"
+
+    # 日志与上传的视频都落到宿主机，容器重建不丢
+    volumes:
+      - ./logs:/app/logs
+      - ./data:/app/data
+
+    # 若 MySQL 和容器在同一台机器上，把 .env 的 DB_HOST 改成 host.docker.internal 即可
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - -e
+        - "require('http').get('http://127.0.0.1:3000/health', function (res) { process.exit(res.statusCode === 200 ? 0 : 1); }).on('error', function () { process.exit(1); })"
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"

@@ -1,0 +1,764 @@
+/* =============================================================
+   admin.css —— 后台界面
+   复用 base.css 的配色令牌与 .btn / .input / .textarea，
+   这里只补布局、表格、编辑器与媒体库。
+   ============================================================= */
+
+body {
+  background: var(--bg);
+}
+
+.admin-shell {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 28px 96px;
+}
+
+/* ---------------------------- 顶栏 ---------------------------- */
+
+.admin-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  height: 64px;
+  border-bottom: 1px solid var(--hair);
+  background: var(--bg);
+}
+
+.admin-brand {
+  font: 500 13px/1 var(--font-mono);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.admin-brand em {
+  font-style: normal;
+  color: var(--text-2);
+  margin-left: 8px;
+  font-weight: 400;
+  font-size: 12px;
+}
+
+.admin-nav {
+  display: flex;
+  gap: 20px;
+  margin-left: auto;
+  font: 400 12.5px/1 var(--font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.admin-nav a {
+  padding: 6px 0;
+  color: var(--text-2);
+  border-bottom: 1px solid transparent;
+}
+
+.admin-nav a:hover,
+.admin-nav a[aria-current="page"] {
+  color: var(--text);
+  border-bottom-color: var(--text);
+}
+
+/* ---------------------------- 通用块 ---------------------------- */
+
+.admin-title {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin: 40px 0 22px;
+}
+
+.admin-title h1 {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.admin-title .hint {
+  font: 400 12.5px/1.6 var(--font-mono);
+  letter-spacing: 0.06em;
+  color: var(--text-2);
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+}
+
+.toolbar .spacer {
+  flex: 1;
+}
+
+.toolbar select {
+  padding: 9px 12px;
+  border: 1px solid var(--hair-strong);
+  border-radius: 2px;
+  background: var(--card-bg);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.toolbar select:focus {
+  outline: none;
+  border-color: var(--text);
+}
+
+/* 分段切换（.tabs）定义在 base.css，后台页面同样加载了它，这里不再重复 */
+
+/* 「文章」列只在评论视图出现，留言板没有归属文章 */
+table.list .col-article {
+  display: none;
+}
+
+table.list.is-comments .col-article {
+  display: table-cell;
+}
+
+.stat-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  margin-bottom: 40px;
+  border: 1px solid var(--hair);
+  background: var(--hair);
+}
+
+.stat {
+  padding: 18px 20px;
+  background: var(--card-bg);
+}
+
+.stat b {
+  display: block;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.stat span {
+  display: block;
+  margin-top: 6px;
+  font: 400 11.5px/1.4 var(--font-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-2);
+}
+
+/* ---------------------------- 表格 ---------------------------- */
+
+.table-wrap {
+  border: 1px solid var(--hair);
+  overflow-x: auto;
+}
+
+table.list {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+table.list th {
+  padding: 11px 14px;
+  border-bottom: 1px solid var(--hair-strong);
+  font: 400 11px/1.4 var(--font-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-2);
+  text-align: left;
+  white-space: nowrap;
+}
+
+table.list td {
+  padding: 13px 14px;
+  border-bottom: 1px solid var(--hair);
+  vertical-align: middle;
+}
+
+table.list tr:last-child td {
+  border-bottom: 0;
+}
+
+table.list tr:hover td {
+  background: var(--wash);
+}
+
+.cell-title {
+  display: block;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.cell-slug {
+  display: block;
+  margin-top: 4px;
+  font: 400 12px/1.4 var(--font-mono);
+  color: var(--text-2);
+}
+
+.cell-meta {
+  font: 400 12px/1.6 var(--font-mono);
+  color: var(--text-2);
+  white-space: nowrap;
+}
+
+.row-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  white-space: nowrap;
+}
+
+.row-actions button,
+.row-actions a {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--text-2);
+  font: 500 12px/1 var(--font-mono);
+  letter-spacing: 0.06em;
+  cursor: pointer;
+}
+
+.row-actions button:hover,
+.row-actions a:hover {
+  color: var(--text);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.row-actions .danger:hover {
+  color: #c14040;
+}
+
+.badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border: 1px solid var(--hair-strong);
+  border-radius: 2px;
+  font: 400 11.5px/1.6 var(--font-mono);
+  letter-spacing: 0.06em;
+  color: var(--text-2);
+}
+
+.badge.is-live {
+  border-color: var(--text);
+  color: var(--text);
+}
+
+.badge.is-draft {
+  color: var(--text-2);
+  border-style: dashed;
+}
+
+/* ---------------------------- 表单 ---------------------------- */
+
+.form-grid {
+  display: grid;
+  gap: 18px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+/* 表单标签：中文在等宽字体里又小又淡，改用正文字体、加大加粗 */
+.field label,
+.field > span {
+  display: block;
+  margin-bottom: 8px;
+  font: 500 13px/1.5 var(--font-sans);
+  letter-spacing: 0.01em;
+  color: var(--text);
+}
+
+.field .input,
+.field .textarea,
+.field select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--hair-strong);
+  border-radius: 2px;
+  background: var(--card-bg);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 14px;
+}
+
+.field select {
+  appearance: none;
+  cursor: pointer;
+}
+
+.field .input:focus,
+.field .textarea:focus,
+.field select:focus {
+  outline: none;
+  border-color: var(--text);
+}
+
+.inline-check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--text-2);
+  cursor: pointer;
+}
+
+.hint-text {
+  margin-top: 7px;
+  font: 400 12px/1.7 var(--font-sans);
+  color: var(--text-2);
+}
+
+/* 字段下方的小操作（分类管理入口），做成文字链接的样子 */
+.field-actions {
+  display: flex;
+  gap: 16px;
+  margin-top: 9px;
+}
+
+.field-actions button {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--text-2);
+  font: 500 12px/1 var(--font-mono);
+  letter-spacing: 0.06em;
+  cursor: pointer;
+}
+
+.field-actions button:hover {
+  color: var(--text);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* 分类管理面板：每行一个分类，右侧带篇数与操作 */
+.category-panel {
+  margin-top: 10px;
+  border: 1px solid var(--hair);
+}
+
+.category-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.category-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--hair);
+  font-size: 13px;
+}
+
+.category-row:last-child {
+  border-bottom: 0;
+}
+
+.category-row:hover {
+  background: var(--wash);
+}
+
+.category-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.category-count {
+  flex: none;
+  font: 400 11.5px/1 var(--font-mono);
+  color: var(--text-2);
+}
+
+.category-ops {
+  display: flex;
+  flex: none;
+  gap: 14px;
+}
+
+.category-ops button {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--text-2);
+  font: 500 12px/1 var(--font-mono);
+  cursor: pointer;
+}
+
+.category-ops button:hover {
+  color: var(--text);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.category-ops .danger:hover {
+  color: #c14040;
+}
+
+.category-empty {
+  padding: 12px;
+  font-size: 12.5px;
+  color: var(--text-2);
+}
+
+/* ---------------------------- 头像字段 ---------------------------- */
+
+.avatar-row {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+.avatar-preview {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 88px;
+  height: 88px;
+  overflow: hidden;
+  border: 1px solid var(--hair-strong);
+  border-radius: 50%;
+  background: var(--bg-subtle);
+}
+
+.avatar-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+#avatar-initial {
+  font: 500 26px/1 var(--font-mono);
+  letter-spacing: 0.02em;
+  color: var(--text);
+  user-select: none;
+}
+
+.avatar-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.avatar-actions .hint-text {
+  flex-basis: 100%;
+  margin-top: 2px;
+  max-width: 22em;
+}
+
+/* ---------------------------- 编辑器 ---------------------------- */
+
+.editor-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  margin-top: 18px;
+  border: 1px solid var(--hair);
+  background: var(--hair);
+}
+
+.editor-pane {
+  display: flex;
+  flex-direction: column;
+  min-height: 520px;
+  background: var(--card-bg);
+}
+
+.editor-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--hair);
+  font: 400 11.5px/1 var(--font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-2);
+}
+
+.editor-bar .spacer {
+  flex: 1;
+}
+
+.editor-bar button {
+  padding: 5px 8px;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  background: none;
+  color: var(--text-2);
+  font: 400 12px/1 var(--font-mono);
+  letter-spacing: 0.04em;
+  cursor: pointer;
+}
+
+.editor-bar button:hover {
+  border-color: var(--hair-strong);
+  color: var(--text);
+}
+
+#content {
+  flex: 1;
+  width: 100%;
+  min-height: 460px;
+  padding: 18px;
+  border: 0;
+  background: var(--card-bg);
+  color: var(--text);
+  font: 400 13.5px/1.75 var(--font-mono);
+  resize: vertical;
+  tab-size: 2;
+}
+
+#content:focus {
+  outline: none;
+}
+
+.preview-scroll {
+  flex: 1;
+  max-height: 720px;
+  padding: 4px 22px 28px;
+  overflow-y: auto;
+}
+
+.preview-body {
+  font-size: 15px;
+  line-height: 1.85;
+}
+
+/* 预览区复用了 article.css 的 .article-body，这里去掉页面上才需要的顶距 */
+.preview-body.article-body {
+  margin-top: 0;
+  font-size: 15px;
+}
+
+.preview-body.article-body > *:first-child {
+  margin-top: 1em;
+}
+
+.preview-empty {
+  padding: 40px 0;
+  font: 400 13px/1.8 var(--font-sans);
+  letter-spacing: 0.01em;
+  color: var(--text-2);
+}
+
+/* ---------------------------- 媒体库 ---------------------------- */
+
+.upload-zone {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 26px;
+  margin-bottom: 22px;
+  border: 1px dashed var(--hair-strong);
+  border-radius: 2px;
+  font: 400 12.5px/1.7 var(--font-sans);
+  letter-spacing: 0.01em;
+  color: var(--text-2);
+  text-align: center;
+  cursor: pointer;
+  transition: border-color var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease);
+}
+
+.upload-zone:hover,
+.upload-zone.is-over {
+  border-color: var(--text);
+  color: var(--text);
+}
+
+.media-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 1px;
+  border: 1px solid var(--hair);
+  background: var(--hair);
+}
+
+.media-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--card-bg);
+}
+
+.media-thumb {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 4 / 3;
+  padding: 10px;
+  background: var(--bg-subtle);
+  overflow: hidden;
+}
+
+.media-thumb img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.media-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 10px 11px;
+  border-top: 1px solid var(--hair);
+  font: 400 11.5px/1.5 var(--font-mono);
+  color: var(--text-2);
+}
+
+.media-info button {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--text-2);
+  font: inherit;
+  cursor: pointer;
+}
+
+.media-info button:hover {
+  color: var(--text);
+}
+
+/* ---------------------------- 提示 ---------------------------- */
+
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 28px;
+  z-index: 60;
+  max-width: 80vw;
+  padding: 11px 18px;
+  border: 1px solid var(--text);
+  background: var(--text);
+  color: var(--bg);
+  font: 400 11.5px/1.5 var(--font-mono);
+  letter-spacing: 0.04em;
+  transform: translate(-50%, 12px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 200ms var(--ease), transform 200ms var(--ease);
+}
+
+.toast.is-show {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+.toast.is-error {
+  background: #b03a3a;
+  border-color: #b03a3a;
+  color: #fff;
+}
+
+/* ---------------------------- 登录页 ---------------------------- */
+
+.login-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 24px;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 380px;
+  padding: 34px 30px 30px;
+  border: 1px solid var(--hair);
+  background: var(--card-bg);
+}
+
+.login-card h1 {
+  margin: 0 0 6px;
+  font: 500 15px/1.4 var(--font-sans);
+  letter-spacing: 0.02em;
+}
+
+.login-card p.sub {
+  margin: 0 0 26px;
+  font: 400 12.5px/1.7 var(--font-sans);
+  color: var(--text-2);
+}
+
+.login-card .form-grid {
+  gap: 14px;
+}
+
+.login-card .btn {
+  margin-top: 6px;
+  width: 100%;
+}
+
+.form-note {
+  margin: 14px 0 0;
+  min-height: 18px;
+  font: 400 12.5px/1.6 var(--font-sans);
+  color: var(--text-2);
+}
+
+.form-note.is-error {
+  color: #b03a3a;
+}
+
+/* ---------------------------- 响应式 ---------------------------- */
+
+@media (max-width: 860px) {
+  .admin-shell {
+    padding: 0 18px 72px;
+  }
+
+  /* 导航变长后允许换行，否则会挤出视口 */
+  .admin-header {
+    height: auto;
+    min-height: 64px;
+    flex-wrap: wrap;
+    gap: 8px 14px;
+    padding: 12px 0;
+  }
+
+  .admin-nav {
+    gap: 14px;
+    margin-left: 0;
+    flex-wrap: wrap;
+  }
+
+  .stat-row {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .editor-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+}

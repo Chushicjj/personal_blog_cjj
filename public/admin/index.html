@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>文章 · Blog_j 后台</title>
+  <meta name="theme-color" content="#fdfbf7">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/base.css">
+  <link rel="stylesheet" href="/admin/admin.css">
+  <script>
+    (function () {
+      try {
+        var saved = localStorage.getItem('blog-theme');
+        var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', theme);
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body>
+  <header class="admin-header">
+    <div class="admin-brand">Blog_j <em>后台</em></div>
+    <nav class="admin-nav" aria-label="后台导航">
+      <a href="/admin/" aria-current="page">文章</a>
+      <a href="/admin/messages.html">留言</a>
+      <a href="/admin/media.html">媒体库</a>
+      <a href="/admin/pages.html">单页</a>
+      <a href="/admin/settings.html">设置</a>
+      <a href="/posts.html" target="_blank" rel="noopener">前台</a>
+      <a href="#" id="logout">退出</a>
+    </nav>
+  </header>
+
+  <main class="admin-shell">
+    <div class="admin-title">
+      <h1>文章</h1>
+      <span class="hint" id="who"></span>
+    </div>
+
+    <section class="stat-row" id="stats" aria-label="数据概览">
+      <div class="stat"><b>—</b><span>文章总数</span></div>
+      <div class="stat"><b>—</b><span>已发布</span></div>
+      <div class="stat"><b>—</b><span>草稿</span></div>
+      <div class="stat"><b>—</b><span>累计阅读</span></div>
+    </section>
+
+    <div class="toolbar">
+      <input class="input" id="search" type="search" placeholder="搜索标题或摘要" style="max-width:260px">
+      <select id="status-filter" aria-label="按状态筛选">
+        <option value="">全部状态</option>
+        <option value="1">已发布</option>
+        <option value="0">草稿</option>
+      </select>
+      <span class="spacer"></span>
+      <a class="btn btn-primary" href="/admin/editor.html">新建文章</a>
+    </div>
+
+    <div class="table-wrap">
+      <table class="list">
+        <thead>
+          <tr>
+            <th style="width:46%">标题</th>
+            <th>状态</th>
+            <th>阅读</th>
+            <th>更新时间</th>
+            <th style="text-align:right">操作</th>
+          </tr>
+        </thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+
+    <div class="state" id="empty" hidden><strong>还没有文章</strong></div>
+
+    <div class="toolbar" style="margin-top:20px">
+      <span class="hint" id="count"></span>
+      <span class="spacer"></span>
+      <button class="btn" id="more" type="button" hidden>加载更多</button>
+    </div>
+  </main>
+
+  <script src="/admin/js/admin.js"></script>
+  <script src="/admin/js/list.js"></script>
+</body>
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Docker 多阶段构建为什么能瘦身一半 · Blog_j</title>
+  <meta name="description" content="把「装依赖」和「跑服务」拆成两个阶段，最终镜像只留运行期需要的东西：体积从 1.1 GB 降到 210 MB。">
+  <meta name="theme-color" content="#fdfbf7">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/base.css">
+  <link rel="stylesheet" href="/assets/css/article.css">
+  <script>
+    (function () {
+      try {
+        var saved = localStorage.getItem('blog-theme');
+        var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', theme);
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到正文</a>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="logo" href="/"><span class="logo-a">cjj</span><span class="logo-b">Blog_j</span></a>
+
+      <nav class="top-nav" aria-label="主导航">
+        <a href="/posts.html" data-nav="posts" aria-current="page">文章</a>
+        <a href="/guestbook.html" data-nav="guestbook">留言</a>
+        <a href="/about.html" data-nav="about">关于</a>
+      </nav>
+
+      <div class="header-actions">
+        <button class="theme-btn" type="button" id="theme-toggle" aria-pressed="false"><span id="theme-label">深色</span></button>
+        <button class="menu-btn" type="button" id="menu-toggle" aria-expanded="false" aria-controls="mobile-menu">菜单</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="mobile-menu" id="mobile-menu">
+    <a href="/">首页</a>
+    <a href="/posts.html">文章</a>
+    <a href="/guestbook.html">留言</a>
+    <a href="/about.html">关于</a>
+  </div>
+
+  <main class="page" id="main">
+    <article class="article">
+      <p class="article-kicker"><a href="/posts.html">← 文章</a></p>
+
+      <header class="article-head">
+        <h1>Docker 多阶段构建为什么能瘦身一半</h1>
+        <div class="article-meta">
+          <time datetime="2026-10-18">2026-10-18</time>
+          <span class="dot">·</span>
+          <span>128 次阅读</span>
+          <span class="dot">·</span>
+          <span>约 6 分钟</span>
+        </div>
+        <div class="article-tags">
+<span class="tag">Docker</span>
+<span class="tag">运维</span>
+        </div>
+      </header>
+
+      <div class="article-body">
+<p>最终镜像里如果还带着 devDependencies、npm 缓存和构建链，体积很容易翻几倍。多阶段构建解决的就是这件事：把「装依赖」和「跑服务」拆成两个阶段，只有运行期需要的东西进入最终镜像。</p>
+<h2>单阶段的问题</h2>
+<div class="code-block" data-lang="dockerfile"><div class="code-head"><span class="code-lang">dockerfile</span></div><pre class="code-pre"><code class="hljs"><span class="line"><span class="hljs-keyword">FROM</span> node:<span class="hljs-number">24</span>-alpine</span>
+<span class="line"><span class="hljs-keyword">WORKDIR</span><span class="language-bash"> /app</span></span>
+<span class="line"><span class="hljs-keyword">COPY</span><span class="language-bash"> . .</span></span>
+<span class="line"><span class="hljs-keyword">RUN</span><span class="language-bash"> npm install</span></span>
+<span class="line"><span class="hljs-keyword">CMD</span><span class="language-bash"> [<span class="hljs-string">&quot;node&quot;</span>, <span class="hljs-string">&quot;app.js&quot;</span>]</span></span></code></pre></div>
+<p>这版镜像里有什么：完整的 <code>node_modules</code>、npm 缓存、<code>.git</code>、测试文件。一个纯 API 服务轻松 1.1 GB。</p>
+<h2>拆成两个阶段</h2>
+<div class="code-block" data-lang="dockerfile"><div class="code-head"><span class="code-lang">dockerfile</span></div><pre class="code-pre"><code class="hljs"><span class="line"><span class="hljs-keyword">FROM</span> node:<span class="hljs-number">24</span>-alpine AS deps</span>
+<span class="line"><span class="hljs-keyword">WORKDIR</span><span class="language-bash"> /app</span></span>
+<span class="line"><span class="hljs-keyword">COPY</span><span class="language-bash"> package*.json ./</span></span>
+<span class="line"><span class="hljs-keyword">RUN</span><span class="language-bash"> npm ci --omit=dev</span></span>
+<span class="line"></span>
+<span class="line"><span class="hljs-keyword">FROM</span> node:<span class="hljs-number">24</span>-alpine AS runtime</span>
+<span class="line"><span class="hljs-keyword">ENV</span> NODE_ENV=production</span>
+<span class="line"><span class="hljs-keyword">WORKDIR</span><span class="language-bash"> /app</span></span>
+<span class="line"><span class="hljs-keyword">COPY</span><span class="language-bash"> --from=deps /app/node_modules ./node_modules</span></span>
+<span class="line"><span class="hljs-keyword">COPY</span><span class="language-bash"> . .</span></span>
+<span class="line"><span class="hljs-keyword">USER</span> node</span>
+<span class="line"><span class="hljs-keyword">CMD</span><span class="language-bash"> [<span class="hljs-string">&quot;node&quot;</span>, <span class="hljs-string">&quot;app.js&quot;</span>]</span></span></code></pre></div>
+<p>关键点三个：</p>
+<ul>
+<li><code>deps</code> 阶段只负责装依赖，<code>--omit=dev</code> 把开发依赖挡在外面</li>
+<li><code>runtime</code> 阶段用 <code>COPY --from</code> 只拿 <code>node_modules</code>，不带 npm 缓存</li>
+<li><code>USER node</code> 让进程以非 root 运行，少一个提权面</li>
+</ul>
+<h2>体积对比</h2>
+<table>
+<thead>
+<tr>
+<th>方案</th>
+<th>体积</th>
+<th>冷启动</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>单阶段</td>
+<td>1.1 GB</td>
+<td>4.2s</td>
+</tr>
+<tr>
+<td>多阶段</td>
+<td>210 MB</td>
+<td>1.8s</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>体积变小不只是「好看」：它直接决定镜像拉取时间和节点扩容速度。</p>
+</blockquote>
+<h2>两个容易忽略的细节</h2>
+<ol>
+<li><code>COPY package*.json</code> 要放在 <code>COPY . .</code> 之前，利用层缓存；只改业务代码时不会重新装依赖</li>
+<li><code>.dockerignore</code> 里排除 <code>node_modules</code>、<code>.env</code>、<code>logs</code>，否则本地依赖会被打进构建上下文，既慢又容易泄露配置</li>
+</ol>
+      </div>
+
+      <nav class="post-nav" aria-label="上一篇与下一篇">
+      <a class="prev" href="/posts/mysql-slow-query.html"><span class="label">上一篇</span><span class="title">一次 MySQL 慢查询排查记录</span></a>
+      <span></span>
+      </nav>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <span>© <span data-year>2026</span> Blog_j</span>
+    <span class="sep">·</span>
+    <span>建站于 <span data-since>2024.03</span></span>
+    <span class="sep">·</span>
+    <span>Node.js · Nginx</span>
+    <button class="to-top" id="to-top" type="button" aria-label="回到顶部">↑</button>
+  </footer>
+
+  <script src="/assets/js/config.js"></script>
+  <script src="/assets/js/util.js"></script>
+  <script src="/assets/js/shell.js"></script>
+</body>
+</html>

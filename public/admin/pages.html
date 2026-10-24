@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>单页 · Blog_j 后台</title>
+  <meta name="theme-color" content="#fdfbf7">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/base.css">
+  <link rel="stylesheet" href="/assets/css/article.css">
+  <link rel="stylesheet" href="/admin/admin.css">
+  <script>
+    (function () {
+      try {
+        var saved = localStorage.getItem('blog-theme');
+        var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', theme);
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body>
+  <header class="admin-header">
+    <div class="admin-brand">Blog_j <em>后台</em></div>
+    <nav class="admin-nav" aria-label="后台导航">
+      <a href="/admin/">文章</a>
+      <a href="/admin/messages.html">留言</a>
+      <a href="/admin/media.html">媒体库</a>
+      <a href="/admin/pages.html" aria-current="page">单页</a>
+      <a href="/admin/settings.html">设置</a>
+      <a href="/posts.html" target="_blank" rel="noopener">前台</a>
+      <a href="#" id="logout">退出</a>
+    </nav>
+  </header>
+
+  <main class="admin-shell">
+    <div class="admin-title">
+      <h1>单页</h1>
+      <span class="hint" id="state">关于页与自定义页面</span>
+    </div>
+
+    <div class="chips" id="page-chips" style="margin-bottom:26px" role="group" aria-label="选择页面"></div>
+
+    <div class="form-grid">
+      <div class="form-row">
+        <div class="field">
+          <label for="title">页面标题</label>
+          <input class="input" id="title" type="text" maxlength="100" placeholder="关于">
+        </div>
+        <div class="field">
+          <label for="key">页面标识（URL）</label>
+          <input class="input" id="key" type="text" readonly>
+          <p class="hint-text" id="url-hint">—</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="editor-grid">
+      <div class="editor-pane">
+        <div class="editor-bar">
+          <span>Markdown</span>
+          <span class="spacer"></span>
+          <button type="button" data-insert="code">代码块</button>
+          <button type="button" data-insert="list">列表</button>
+          <button type="button" data-insert="quote">引用</button>
+        </div>
+        <textarea id="content" spellcheck="false" placeholder="用 Markdown 写页面内容"></textarea>
+      </div>
+
+      <div class="editor-pane">
+        <div class="editor-bar">
+          <span>预览</span>
+          <span class="spacer"></span>
+          <span id="word-info"></span>
+        </div>
+        <div class="preview-scroll">
+          <div class="preview-body article-body" id="preview">
+            <p class="preview-empty">选择左侧页面开始编辑。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="toolbar" style="margin-top:24px">
+      <button class="btn btn-primary" id="save" type="button">保存页面</button>
+      <button class="btn" id="delete" type="button">删除页面</button>
+      <span class="spacer"></span>
+      <button class="btn" id="preview-link" type="button">在前台查看</button>
+    </div>
+  </main>
+
+  <script src="/admin/js/admin.js"></script>
+  <script src="/admin/js/pages.js"></script>
+</body>
+</html>

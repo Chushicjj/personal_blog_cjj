@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>一次 MySQL 慢查询排查记录 · Blog_j</title>
+  <meta name="description" content="线上接口偶发超时，最后落在一条按状态筛选的分页 SQL 上：扫描 4.8 万行变成 10 行，耗时从 182ms 降到 0.9ms。">
+  <meta name="theme-color" content="#fdfbf7">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/base.css">
+  <link rel="stylesheet" href="/assets/css/article.css">
+  <script>
+    (function () {
+      try {
+        var saved = localStorage.getItem('blog-theme');
+        var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', theme);
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到正文</a>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="logo" href="/"><span class="logo-a">cjj</span><span class="logo-b">Blog_j</span></a>
+
+      <nav class="top-nav" aria-label="主导航">
+        <a href="/posts.html" data-nav="posts" aria-current="page">文章</a>
+        <a href="/guestbook.html" data-nav="guestbook">留言</a>
+        <a href="/about.html" data-nav="about">关于</a>
+      </nav>
+
+      <div class="header-actions">
+        <button class="theme-btn" type="button" id="theme-toggle" aria-pressed="false"><span id="theme-label">深色</span></button>
+        <button class="menu-btn" type="button" id="menu-toggle" aria-expanded="false" aria-controls="mobile-menu">菜单</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="mobile-menu" id="mobile-menu">
+    <a href="/">首页</a>
+    <a href="/posts.html">文章</a>
+    <a href="/guestbook.html">留言</a>
+    <a href="/about.html">关于</a>
+  </div>
+
+  <main class="page" id="main">
+    <article class="article">
+      <p class="article-kicker"><a href="/posts.html">← 文章</a></p>
+
+      <header class="article-head">
+        <h1>一次 MySQL 慢查询排查记录</h1>
+        <div class="article-meta">
+          <time datetime="2026-09-27">2026-09-27</time>
+          <span class="dot">·</span>
+          <span>96 次阅读</span>
+          <span class="dot">·</span>
+          <span>约 5 分钟</span>
+        </div>
+        <div class="article-tags">
+<span class="tag">MySQL</span>
+<span class="tag">排查</span>
+        </div>
+      </header>
+
+      <div class="article-body">
+<p>线上接口偶发超时，慢查询日志里定位到一条按状态筛选的分页 SQL。把排查顺序记下来，下次不用重新想。</p>
+<h2>先看执行计划</h2>
+<div class="code-block" data-lang="sql"><div class="code-head"><span class="code-lang">sql</span></div><pre class="code-pre"><code class="hljs"><span class="line">EXPLAIN ANALYZE</span>
+<span class="line"><span class="hljs-keyword">SELECT</span> id, title, published_at</span>
+<span class="line"><span class="hljs-keyword">FROM</span> articles</span>
+<span class="line"><span class="hljs-keyword">WHERE</span> status <span class="hljs-operator">=</span> <span class="hljs-number">1</span></span>
+<span class="line"><span class="hljs-keyword">ORDER</span> <span class="hljs-keyword">BY</span> published_at <span class="hljs-keyword">DESC</span></span>
+<span class="line">LIMIT <span class="hljs-number">10</span>;</span></code></pre></div>
+<p>输出里 <code>type=ALL</code>、<code>rows=48213</code>，说明在扫全表。<code>status</code> 只有 0 和 1 两个值，单列索引选择性太差，真正需要的是 <code>(status, published_at)</code> 联合索引。</p>
+<h2>加索引前后</h2>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>加索引前</th>
+<th>加索引后</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>扫描行数</td>
+<td>48213</td>
+<td>10</td>
+</tr>
+<tr>
+<td>耗时</td>
+<td>182ms</td>
+<td>0.9ms</td>
+</tr>
+</tbody></table>
+<h2>为什么是这个顺序</h2>
+<p>联合索引 <code>(status, published_at)</code> 同时满足「等值过滤 + 排序」：<code>status</code> 先定位到已发布区间，<code>published_at</code> 在区间内天然有序，<code>ORDER BY</code> 不再需要额外排序。</p>
+<p>反过来 <code>(published_at, status)</code> 就退化了：先按时间扫，再逐行判断状态，等于白建。</p>
+<h2>收尾</h2>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span></div><pre class="code-pre"><code class="hljs"><span class="line">mysql -e <span class="hljs-string">&quot;SHOW INDEX FROM articles\\G&quot;</span> | grep -A4 idx_articles_feed</span>
+<span class="line">mysql -e <span class="hljs-string">&quot;SHOW GLOBAL STATUS LIKE &#x27;Slow_queries&#x27;&quot;</span></span></code></pre></div>
+<p><code>Slow_queries</code> 计数还在涨，说明还有别的语句没优化，别只盯着这一条。</p>
+      </div>
+
+      <nav class="post-nav" aria-label="上一篇与下一篇">
+      <span></span>
+      <a class="next" href="/posts/docker-multi-stage.html"><span class="label">下一篇</span><span class="title">Docker 多阶段构建为什么能瘦身一半</span></a>
+      </nav>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <span>© <span data-year>2026</span> Blog_j</span>
+    <span class="sep">·</span>
+    <span>建站于 <span data-since>2024.03</span></span>
+    <span class="sep">·</span>
+    <span>Node.js · Nginx</span>
+    <button class="to-top" id="to-top" type="button" aria-label="回到顶部">↑</button>
+  </footer>
+
+  <script src="/assets/js/config.js"></script>
+  <script src="/assets/js/util.js"></script>
+  <script src="/assets/js/shell.js"></script>
+</body>
+</html>
