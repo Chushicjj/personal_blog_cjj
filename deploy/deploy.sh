@@ -21,6 +21,7 @@ APP=/srv/blog
 DATA=/srv/data
 BACKUP=/srv/backup
 SERVICE=blog
+APP_USER=${APP_USER:-cjj}
 KEEP_PREV=3
 
 TS=$(date +%Y%m%d-%H%M%S)
@@ -117,6 +118,10 @@ deploy() {
   tar -xzf "$pkg" -C "$NEW"
   [ -f "$NEW/app.js" ] || die "包里没有 app.js，确认传的是项目根目录的打包"
   ok "文件数 $(find "$NEW" -type f | wc -l)"
+
+  # 脚本用 sudo 跑，解压出来默认是 root 属主；应用以 cjj 运行，必须改回去
+  chown -R "$APP_USER:$APP_USER" "$NEW"
+  ok "属主已设为 $APP_USER"
 
   # 3. 配置文件跟着代码走，但内容永远是服务器上那份
   cp "$APP/.env" "$NEW/.env"
